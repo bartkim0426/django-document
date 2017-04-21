@@ -118,7 +118,7 @@ all(), get(), filter(), exlude() 이외에도 여러 메소드 - QuerySet API Re
 python의 array-slicing syntax를 사용 가능
 
 ```python
->>> Entry.objects.all()[:5]
+>>> Entry.objects.wall()[:5]
 >>> Entry.objects.all()[5:10]
 >>> Entry.objects.all()[:10:2]
 ```

@@ -36,13 +36,11 @@ Q) __eq__(), __hash()__,
 
 #### [Saving objects, Deleting objects](): p.1132, p.1135
 
-#### [Queryset API](): p.1140~
-
 #### [Model inheritance](): p.96~
 
 #### [Querys](https://github.com/bartkim0426/django-document/blob/master/models/querys.md)
 
-#### [QuerySet API Reference: ](https://github.com/bartkim0426/django-document/blob/master/models/Queryset%20API%20Reference.markdown) objects.get()처럼 사용하는 API
+#### [QuerySet API Reference: ](https://github.com/bartkim0426/django-document/blob/master/models/Queryset%20API%20Reference.markdown) objects.get()처럼 사용하는 API: p.1139~ 
 
 #### [field lookups](https://github.com/bartkim0426/django-document/blob/master/models/field%20lookups.markdown): (p.1171) get(), filter(), exclude() 안에 사용되는 lookpus, p.104~
 

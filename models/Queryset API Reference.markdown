@@ -1,4 +1,24 @@
-## Methods that return new QuerySets
+## Queryset API reference
+
+### When QuerySets are evaluated (p.1140)
+
+언제 queryset이 evaluated 되는지 (이거 정리한거같은데...)
+
+- **iteration**
+- **slicing**
+- **pickling/Caching**
+- **repr()**
+- **len()**
+- **list()**
+- **bool()**
+
+#### Pickling QuerySets (p.1141)
+
+1141.p 참고
+
+
+
+### Methods that return new QuerySets
 
 p.1141
 
