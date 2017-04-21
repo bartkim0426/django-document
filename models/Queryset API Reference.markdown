@@ -408,3 +408,24 @@ Entry.objects.defer("body").only("headline", "body")
 | delete()                   |      |
 | as_manager()               |      |
 
+
+
+#### bulk_create(*objs, batch_size=None*) p.1165
+
+이 메서드는 효율적으로 주어진 objects의 리스트를 추가한다.
+
+```python
+>>> Entry.objects.bulk_create([ 
+... Entry(headline='This is a test'), 
+... Entry(headline='This is only a test'), 
+... ])
+```
+
+몇가지 경고:
+
+- model의 save() 메서드가 불러지지 않음, pre_save, post_save signals도
+- Multi-table 상속 상황에서의 child class에서 작동하지 않음
+- 모델의 pk가 AutoField인 경우 pk 속성을 불러오지 못한다(?)
+- many-to-many 관계에서 작동하지 않음
+
+batch_size 파라미터는 얼마나 많은 오브젝트를 한 쿼리에서 만들 것인지에 대한 파라미터. default는 한 batch에 모든 objects 가능 (SQLite는 999가 최대)
