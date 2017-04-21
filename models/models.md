@@ -65,3 +65,7 @@ ManyToMany
 	p.104~
 
 
+[manager]
+
+
+[Database transactions]
