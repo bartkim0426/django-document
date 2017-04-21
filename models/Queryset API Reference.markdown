@@ -45,28 +45,7 @@ p.1141
 | raw()                                    |      |
 |                                          |      |
 
-### QuerySet을 리턴하지 않는 메소드
-
-| get(**kwargs)              |      |
-| -------------------------- | :--- |
-| create(**kwargs)           |      |
-| get_or_create(**kwargs)    |      |
-| update_or_create(**kwargs) |      |
-| bulk_create(objs)          |      |
-| count()                    |      |
-| in_bulk(id_list=None)      |      |
-| iterator()                 |      |
-| latest(field_name=None)    |      |
-| earliest(field_name=None)  |      |
-| first()                    |      |
-| last()                     |      |
-| aggregate()                |      |
-| exists()                   |      |
-| update(**kwargs)           |      |
-| delete()                   |      |
-| as_manager()               |      |
-
-#### filter() 
+#### filter()
 
 lookup parameter와 매치되는 objects를 담은 쿼리셋을 리턴
 
@@ -225,7 +204,153 @@ EmptyQueryset을 반환해준다.
 
 #### select_related(*fields) p.1150
 
+쿼리에서 실행된 추가적인 related-object data를 따르는 foreign-key 관계를 따르는 쿼리셋을 리턴 (??)
+
+=> 성능 부스터됨: 나중에 foreign-key relationship이 db query에서 필요가 없을 경우에… (???)
+
+예시 (일반 lookup과 select_related() lookup의 차이)
+
+```python
+# 일반적인 lookup
+e = Entry.objects.get(id=5)
+
+b = e.blog # related된 Blog object를 얻기 위해 db를 한 번 더 hit
+
+# select_related lookup
+e = Entry.objects.select_related('blog').get(id=5)
+
+b = e.blog 
+# 똑같아 보이지만 이전 쿼리에서 e.blog가 이미 뽑혔기 때문에 db를 hit하지 않는다
+```
+
+어떤 쿼리셋에서든지 `select_related()` 를 사용 가능하다.
+
+```python
+from django.utils import timezone
+
+# 미래에 published되게 스케쥴링된 entries를 찾기
+blog = set()
+
+for e in Entry.objects.filter(pub_date__gt=timezone.now()).select_related('blog'):
+    blog.add(e.blog)
+    # select_related()가 없으면, 각각의 loop iteration에서 db를 hit한다.
+```
+
+다음의 예시에서 foreignkey도 같은 방식임을 확인할 수 있다.
+
+```python
+from django.db import models
+
+class City(models.Model):
+    ...
+    pass
+
+class Person(models.Model):
+    ...
+    hometown = models.ForeignKey(
+    	City,
+        ...,
+    )
+
+class Book(models.Model):
+    ...
+    author = models.ForeignKey(Person)
+```
+
+이제 `Book.objects.select_related('author__hometown').get(id=4)` 는 Person, City와 모두 연관된 값을 캐싱한다.
+
+```python
+b = Book.objects.select_related('author__hometown').get(id=4)
+p = b.author 
+c = p.hometown
+# select_related로 뽑았기 때문에 위의 p, c 모두 db를 hit하지 않는다.
+
+b = Book.objects.get(id=4)
+p = b.author
+c = p.hometown
+# 둘 다 db를 hit한다.
+```
+
+어떤 ForeignKey나 OneToOneField 관계에서든지 select_related()를 사용 가능하다. 
+
+이미 불러진 QuerySet list를 clear하기 위해서는 None을 파라미트로 주면 된다.
+
+```python
+>>> without_relations = queryset.select_related(None)
+```
+
+select_related는 Chaining도 가능하다 - `select_related('foo', 'bar')` 과 같이...
+
+자세한 내용은 doc 참고...
+
+
+
 #### prefetch_related(*lookups)
 
+> prefetch: 진행중인 처리와 병행하여 필요하다고 생각되는 명령 또는 데이터를 사전에 판독하는 것
+
+"Returns a QuerySet that will automatically retrieve, in a single batch, related objects for each of the speciﬁed lookups." (잘 해석이 안돼요..) 
+
+위의 select_related과 비슷하지만 foreign-key, Ono-to-one 뿐 아니라 many-to-many 등 모든 relations에서 사용 가능하다…는 것 만 알겠다 (나머지는 doc 참고)
+
+```python
+from django.db import models
+
+class Topping(models.Model):
+    name = models.CharField(max_length=30)
+    
+class Pizza(models.Model):
+    name = models.CharField(max_length=50)
+    toppings = models.ManyToManyField(Topping)
+    
+    def __str__(self):
+        return "%s (%s)" %(
+        	self.name,
+            ", ".join(topping.name for topping in self.topping.all())
+        )
+```
+
+이런 모델에서 다음 쿼리문을 비교해보았다.
+
+```python
+>>> Pizza.objects.all()
+# 위 구문은 매 object마다 Pizza.__str__()을 실행하면서 self.topping.all()을 실행. 
+>>> Pizza.objects.prefetch_related('toppings')
+# 위와 달리 self.toppings.all()이 실행되면 이미 prefetch된 QuerySet의 캐시에서 싱글 쿼리를 뽑아낸다.
+```
+
+
+
+더 자세한 내용은 doc...
+
+
+
+#### extra() (p.1155)
+
 여기부턴 다음에 정리… 너무많다
+
+
+
+
+
+### QuerySet을 리턴하지 않는 메소드
+
+| get(**kwargs)              |      |
+| -------------------------- | :--- |
+| create(**kwargs)           |      |
+| get_or_create(**kwargs)    |      |
+| update_or_create(**kwargs) |      |
+| bulk_create(objs)          |      |
+| count()                    |      |
+| in_bulk(id_list=None)      |      |
+| iterator()                 |      |
+| latest(field_name=None)    |      |
+| earliest(field_name=None)  |      |
+| first()                    |      |
+| last()                     |      |
+| aggregate()                |      |
+| exists()                   |      |
+| update(**kwargs)           |      |
+| delete()                   |      |
+| as_manager()               |      |
 
