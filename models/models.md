@@ -8,6 +8,8 @@ Models 공부하는 내용들 정리
 
 #### [models field reference](https://github.com/bartkim0426/django-document/blob/master/models/model%20field%20reference.md)
 
+p.1092~ 표로 정리. 각각의 field option / type은 정리 아직 못함.
+
 #### [field option](https://github.com/bartkim0426/django-document/blob/master/models/field%20lookups.markdown)
 
 표로 정리중. 
@@ -41,6 +43,8 @@ Q) __eq__(), __hash()__,
 #### [Querys](https://github.com/bartkim0426/django-document/blob/master/models/querys.md)
 
 #### [QuerySet API Reference: ](https://github.com/bartkim0426/django-document/blob/master/models/Queryset%20API%20Reference.markdown) objects.get()처럼 사용하는 API: p.1139~ 
+
+p.1150 prefetch_related부터 이어서 정리 필요
 
 #### [field lookups](https://github.com/bartkim0426/django-document/blob/master/models/field%20lookups.markdown): (p.1171) get(), filter(), exclude() 안에 사용되는 lookpus, p.104~
 
