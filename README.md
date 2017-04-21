@@ -6,4 +6,10 @@ django 1.10, pdf 파일 기준 정리입니다.
 
 1. [Models](https://github.com/bartkim0426/django-document/blob/master/models/models.md): ~p.131
 
-2. [manager](): p.132~
+2. [manager](https://github.com/bartkim0426/django-document/blob/master/models/manager.md): p.132~
+
+3. [raw SQL](https://github.com/bartkim0426/django-document/blob/master/models/SQL.md)
+
+4. [Database transaction](https://github.com/bartkim0426/django-document/blob/master/models/Database%20transactions.md)
+
+
