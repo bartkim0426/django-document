@@ -329,7 +329,61 @@ class Pizza(models.Model):
 
 여기부턴 다음에 정리… 너무많다
 
+...
 
+#### defer(\**fields*) : p.1158 
+
+Q) 잘몰겠음… 특정 필드의 로드를 늦춰주는?
+
+복잡한 data-modeling 상황에서, 모델은 많은 필드를 포함하고 있다: 많은 데이터가 있는 필드 (text field같이)나 Python object로 변환해주는 프로세싱을 필요로 하는 필드 등… 
+
+만약 쿼리셋 결과를 사용하기 위해 처음 data를 fetch 할 때 특정 필드가 필요 없다고 생각되면 django에게 retrieve 하지 말라고 할 수 있음: defer()를 사용해서 load하지 않을 필드를 특정 가능하다.
+
+```python
+Entry.objects.defer("headline", "body")
+```
+
+그래도 model instance를 리턴하긴 함: 각각의 deferred field는 필드에 접근 할 때 db에서 retrieved 된다. 
+
+다음과 같이 여러번 부를 수도 있다.
+
+```python
+Entry.objects.defer("body").filter(rating=5).defer("headline")
+```
+
+related models의 필드 또한 defer 가능하다
+
+```python
+Blog.objects.select_related().dfer("entry__headline", "entry__body")
+```
+
+모든 deferred fields를 지우려면 None을 파라미터로 주면 된다.
+
+```python
+my_queryset.defer(None)
+```
+
+몇몇 필드들은 defer되지 않는다: primary key는 결코 defer할 수 없음, 에러를 반환한다.
+
+> defer(), only()는 advanced use-case: 최적화를 해주지만 당신이 어떤 정보를 원하고, 전체 데이터 셋을 뽑아내는것과 명확히 어떤 차이가 있는지 '정확히' 알고 사용해야한다… ㄷㄷㄷ 자세한 내용은 공식 문서 (p.1159) 참고
+
+#### only(\**fields*): p.1160
+
+only 메소드는 defer()과 반대되는 개념. 모델을 retrieving 할 때 defer되지 않을 필드를 명시. 다음과 같이 defer()과 함께 사용 가능하다.
+
+```python
+# This will defer all fields except the headline. 
+Entry.objects.only("body", "rating").only("headline")
+
+# Final result is that everything except "headline" is deferred
+Entry.objects.only("headline", "body").defer("body")
+
+# Final result loads headline and body immediately (only() replaces any 
+# existing set of fields).
+Entry.objects.defer("body").only("headline", "body")
+```
+
+자세한 내용은 공식 문서.
 
 
 
