@@ -59,3 +59,11 @@ p.96~
 [field lookups](x-devonthink-item://CDB835D1-8647-4A7E-B931-D4F39E1DAA5F): (p.1171) get(), filter(), exclude() 안에 사용되는 lookpus
 
 p.104~
+
+
+
+
+
+## 내부분 (p132~)
+
+## Managers ()
