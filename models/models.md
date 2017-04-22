@@ -57,9 +57,9 @@ p.1150 prefetch_related부터 이어서 정리 필요
 
 #### [Multiple database](https://github.com/bartkim0426/django-document/blob/master/models/Multiple%20database.md) : p.153~
 
-#### [Tablespaces](): p.164~
+#### [Tablespaces](https://github.com/bartkim0426/django-document/blob/master/models/tablespaces.md): p.164~
 
-#### [Database access optimization](): p.165~, db 접근 최적화
+#### [Database access optimization](https://github.com/bartkim0426/django-document/blob/master/models/Database%20access%20optimization.md): p.165~, db 접근 최적화
 
 장고의 db layer는 다양한 방법으로 개발자들이 db에 접근하게 도와줌: 여러 연관된 다큐멘트, 다양한 팁, 많은 아웃라인들을 모아놓음
 
