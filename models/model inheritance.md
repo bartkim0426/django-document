@@ -161,3 +161,5 @@ OneToOneField 링크를 장고에서 자동으로 만들어주지만, `parent_li
 
 proxy model을 만들어 이를 오리지널 모델에 저장 할 수 있다.  
 
+(살짝만 바꾼다는게...)
+
