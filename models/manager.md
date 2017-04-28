@@ -5,6 +5,7 @@ class Manager
 Manager is the interface through which database query operations are provided
 
 모든 모델은 적어도 한개의 매니저를 가짐
+---
 
 ### Manager names
 
